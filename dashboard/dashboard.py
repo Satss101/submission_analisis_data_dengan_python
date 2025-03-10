@@ -71,12 +71,13 @@ max_date = pd.to_datetime(max_date)
 st.caption(f"Nilai PM10 tertinggi pada kota **{selected_city}** memiliki nilai sebesar **{max_PM10}**")
 st.caption(f"terjadi pada tanggal: **{max_date}**")
 
+# memberikan keterangan
 with st.expander("Explanation"):
     st.write(
         """
         Pada kota yang Anda pilih, kami menampilkan rata-rata bulanan nilai PM10.
-        PM10 adalah partikel kecil yang dapat masuk ke organ dalam manusia dan menyebabkan masalah kesehatan.
-        apabila mengkonsumsi air dengan nilai PM10 yang tinggi dapat menyebabkan masalah pada pencernaan.
+        PM10 adalah partikel kecil yang dapat masuk ke paru-paru dan menyebabkan masalah kesehatan.
+        apabila menghirup udara dengan nilai PM10 yang tinggi dapat menyebabkan masalah pada paru-paru.
         """
     )
 
@@ -139,9 +140,9 @@ with tab1:
     with st.expander("See explanation"):
         st.write(
             """
-            informasi diatas adalah grafik dari rata-rata nilai PM10 setiap bulan pada dua belas kota yang ada di China.
-            Grafik ini menunjukkan bahwa nilai PM10 pada bulan-bulan tertentu lebih
-            tinggi dibandingkan bulan lainnya.
+            informasi diatas adalah grafik dari rata-rata nilai PM10 setiap bulan 
+            pada dua belas kota yang ada di China.Grafik ini menunjukkan bahwa 
+            nilai PM10 pada bulan-bulan tertentu lebih tinggi dibandingkan bulan lainnya.
             """
         )
 
@@ -170,7 +171,7 @@ with tab3:
             """
             peta diatas adalah peta negara China yang menunjukkan lokasi stasiun pemantauan kualitas udara.
             peta ini menunjukkan bahwa stasiun pemantauan tersebar di seluruh wilayah China.
-            namun tidak semua wilayah memiliki stasiun pemantauan. hanya bagian
-            yang memiliki stasiun pemantauan saja yang terlihat pada peta.
+            namun tidak semua wilayah memiliki stasiun pemantauan. hanya bagian tengah
+            yang memiliki stasiun pemantauan saja.
             """
         )
