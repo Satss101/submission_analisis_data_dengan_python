@@ -6,8 +6,7 @@ from geopy.geocoders import Nominatim
 import matplotlib.image as mpimg
 
 # Dataset
-data_dir = 'E:/2. UKSW/2. Akademik/Semester 11/2. DBS Foundation/3. Materi/1. Machine Learning/8. Belajar Analisis Data dengan Python/submission/data/'
-data_dir_merged = 'E:/2. UKSW/2. Akademik/Semester 11/2. DBS Foundation/3. Materi/1. Machine Learning/8. Belajar Analisis Data dengan Python/submission/dashboard/'
+data_dir = './data/'
 data_files = ['PRSA_Data_Aotizhongxin_20130301-20170228.csv',
               'PRSA_Data_Changping_20130301-20170228.csv',
               'PRSA_Data_Dingling_20130301-20170228.csv',
@@ -25,6 +24,7 @@ data_files = ['PRSA_Data_Aotizhongxin_20130301-20170228.csv',
 city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
               'Gucheng', 'Huairou', 'Nongzhanguan', 'Shunyi', 'Tiantan',
               'Wanliu', 'Wanshouxigong']
+all_data = pd.read_csv('dashboard/dashboard.csv')
 
 # Membaca dataset ke dictionary
 data_kota = {city: pd.read_csv(data_dir + file) for city, file in zip(city_names, data_files)}
@@ -80,15 +80,15 @@ with st.expander("Explanation"):
         """
     )
 
-# Menggabungkan semua data dari dictionary menjadi satu DataFrame
-all_data = pd.concat(data_kota.values(), ignore_index=True)
-
+# ubah data menjadi datetime
+all_data['date'] = pd.to_datetime(all_data['date'])
+                                           
 # Menghitung rata-rata PM10 untuk semua kota per bulan
-data_time_series = all_data[['date', 'PM10']].set_index('date').resample('ME').mean()
+data_all_time_series = all_data[['date', 'PM10']].set_index('date').resample('ME').mean()
 
 # Mencari nilai maksimum PM10 dan tanggalnya
-max_pm10_value = data_time_series['PM10'].max()
-max_pm10_date = data_time_series['PM10'].idxmax()
+max_pm10_value = data_all_time_series['PM10'].max()
+max_pm10_date = data_all_time_series['PM10'].idxmax()
 
 # Memilih hanya kolom numerik
 numeric_data = all_data.select_dtypes(include=['number'])
@@ -96,33 +96,9 @@ numeric_data = all_data.select_dtypes(include=['number'])
 # Menghitung korelasi antar kolom numerik
 correlation_matrix = numeric_data.corr()
 
-# buat longtitude dan latitude
-# Inisialisasi geocoder
-geolocator = Nominatim(user_agent="geoapi")
-
-# Fungsi untuk mendapatkan koordinat
-def get_coordinates(station_name):
-    try:
-        location = geolocator.geocode(station_name + ", China")  # Menambahkan "China" agar lebih spesifik
-        if location:
-            return pd.Series([location.latitude, location.longitude])
-        else:
-            return pd.Series([None, None])
-    except:
-        return pd.Series([None, None])
-
-# Menghapus duplikasi stasiun agar tidak mengulang pencarian yang sama
-unique_stations = all_data[['station']].drop_duplicates()
-
-# Mendapatkan koordinat untuk setiap stasiun (dengan jeda agar tidak diblokir)
-unique_stations[['latitude', 'longitude']] = unique_stations['station'].apply(get_coordinates)
-
-# Menggabungkan kembali dengan all_data
-all_data = all_data.merge(unique_stations, on="station", how="left", suffixes=('', '_duplicate'))
-
 def plot_china_map(data):
     # Path ke file gambar lokal
-    image_path = 'E:/2. UKSW/2. Akademik/Semester 11/2. DBS Foundation/3. Materi/1. Machine Learning/8. Belajar Analisis Data dengan Python/submission/china.jpg'
+    image_path = 'china.jpg'
 
     # Membaca gambar peta China dari file lokal
     china_map = mpimg.imread(image_path)
@@ -142,7 +118,7 @@ all_data = all_data.dropna(subset=['longitude', 'latitude'])
 
 # Plot nilai PM10 di setiap kota
 tot_PM, ax = plt.subplots(figsize=(15, 6))
-ax.plot(data_time_series.index, data_time_series['PM10'], linestyle = '-', label='PM10', color = 'b')
+ax.plot(data_all_time_series.index, data_all_time_series['PM10'], linestyle = '-', label='PM10', color = 'b')
 # Menandai titik maksimum dengan warna merah
 ax.scatter(max_pm10_date, max_pm10_value, color='red', s=300, marker='*', label=f'Max PM10')
 ax.set_title(f"PM10 Rata-rata Bulanan di Semua Kota")
