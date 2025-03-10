@@ -43,5 +43,8 @@ notebook.ipynb (berisi informasi dari pembuatan dashboard)
    streamlit run dashboard.py
    ```
 ## Lampiran halaman Dashboard
-![image](tampilan_dashboard.png)
+![image](tampilan1.png)
+![image](tampilan2.png)
+![image](tampilan3.png)
+![image](tampilan4.png)
 ![image](china.jpg)
