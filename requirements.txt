@@ -1,6 +1,7 @@
-pandas
-matplotlib
-scipy
 streamlit
+matplotlib
+pandas
 seaborn
-geocoders
+scikit-learn
+scipy
+requests
