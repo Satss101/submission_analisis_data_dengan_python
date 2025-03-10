@@ -2,6 +2,7 @@
 submission kelas dicoding analisis data dengan python dengan membuat analisa dari data kualitas air di kota China. Ini adalah proyek akhir dari kursus "Belajar Analisis Data dengan Python" dari Dicoding. berikut adalah informasi tahapan analisis data mulai dari data Wrangling, Exploratory Data Analysis, dan Data Visualization. selanjutnya adalah membuat dashboard menggunakan streamlit yang kemudian di deploy agar dapat diakses semua orang.
 
 ## Dataset
+https://drive.google.com/file/d/1RhU3gJlkteaAQfyn9XOVAz7a5o1-etgr/view
 
 ## 1. Data Wrangling:
 - Gathering data
@@ -42,8 +43,5 @@ notebook.ipynb (berisi informasi dari pembuatan dashboard)
    streamlit run dashboard.py
    ```
 ## Lampiran halaman Dashboard
-![image](https://github.com/user-attachments/assets/ad298cfc-1e1d-46f0-a111-dcca1b2daf44)
-![image](https://github.com/user-attachments/assets/736f719d-ced8-4212-bb8d-00500b1e662a)
-![image](https://github.com/user-attachments/assets/32beaa57-e848-4300-9acf-a1c8d3c3433e)
-![image](https://github.com/user-attachments/assets/f3b0af70-338d-40f0-ad16-de265ad32cac)
-![image](https://github.com/user-attachments/assets/9502f9ce-b8e0-454b-b37f-8ffb06750024)
+![image](tampilan_dashboard.png)
+![image](china.jpg)
