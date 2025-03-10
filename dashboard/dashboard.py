@@ -39,11 +39,11 @@ for city in data_kota:
         df.loc[:, column] = df[column].fillna(mode_value)  # Perbaikan
 
 # Membuat Dashboard
-st.header('Dashboard Data Kualitas Air di China')
+st.header('Dashboard Data Kualitas Udara di Negara China')
 
 # Sidebar untuk memilih kota
 with st.sidebar:
-    st.header('Data Kualitas Air di Kota Cina')
+    st.header('Data Kualitas Udara di Kota Cina')
     selected_city = st.radio("Pilih Kota yang ingin Anda lihat", city_names, horizontal=False)
 
 # Ambil data berdasarkan kota yang dipilih
