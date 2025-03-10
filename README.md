@@ -1,5 +1,5 @@
 # Submission_analisis_data_dengan_python
-submission kelas dicoding analisis data dengan python dengan membuat analisa dari data kualitas air di kota China. Ini adalah proyek akhir dari kursus "Belajar Analisis Data dengan Python" dari Dicoding. berikut adalah informasi tahapan analisis data mulai dari data Wrangling, Exploratory Data Analysis, dan Data Visualization. selanjutnya adalah membuat dashboard menggunakan streamlit yang kemudian di deploy agar dapat diakses semua orang.
+submission kelas dicoding analisis data dengan python dengan membuat analisa dari data kualitas udara di kota China. Ini adalah proyek akhir dari kursus "Belajar Analisis Data dengan Python" dari Dicoding. berikut adalah informasi tahapan analisis data mulai dari data Wrangling, Exploratory Data Analysis, dan Data Visualization. selanjutnya adalah membuat dashboard menggunakan streamlit yang kemudian di deploy agar dapat diakses semua orang.
 
 ## Dataset
 https://drive.google.com/file/d/1RhU3gJlkteaAQfyn9XOVAz7a5o1-etgr/view
