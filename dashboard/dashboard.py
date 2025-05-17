@@ -5,38 +5,15 @@ import streamlit as st
 from geopy.geocoders import Nominatim
 import matplotlib.image as mpimg
 
-# Dataset
+
 data_dir = './data/'
-data_files = ['PRSA_Data_Aotizhongxin_20130301-20170228.csv',
-              'PRSA_Data_Changping_20130301-20170228.csv',
-              'PRSA_Data_Dingling_20130301-20170228.csv',
-              'PRSA_Data_Dongsi_20130301-20170228.csv',
-              'PRSA_Data_Guanyuan_20130301-20170228.csv',
-              'PRSA_Data_Gucheng_20130301-20170228.csv',
-              'PRSA_Data_Huairou_20130301-20170228.csv',
-              'PRSA_Data_Nongzhanguan_20130301-20170228.csv',
-              'PRSA_Data_Shunyi_20130301-20170228.csv',
-              'PRSA_Data_Tiantan_20130301-20170228.csv',
-              'PRSA_Data_Wanliu_20130301-20170228.csv',
-              'PRSA_Data_Wanshouxigong_20130301-20170228.csv']
 
 # Buat dictionary agar bisa dipilih berdasarkan nama kota
 city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
               'Gucheng', 'Huairou', 'Nongzhanguan', 'Shunyi', 'Tiantan',
               'Wanliu', 'Wanshouxigong']
+
 all_data = pd.read_csv('dashboard/dashboard.csv')
-
-# Membaca dataset ke dictionary
-data_kota = {city: pd.read_csv(data_dir + file) for city, file in zip(city_names, data_files)}
-
-# Memperbaiki data
-for city in data_kota:
-    df = data_kota[city]
-    df['date'] = pd.to_datetime(df[['year', 'month', 'day', 'hour']])
-    df.fillna(df.mean(numeric_only=True), inplace=True)  # Mengisi NaN dengan rata-rata
-    for column in df.select_dtypes(include=['object']).columns:
-        mode_value = df[column].mode()[0]
-        df.loc[:, column] = df[column].fillna(mode_value)  # Perbaikan
 
 # Membuat Dashboard
 st.header('Dashboard Data Kualitas Udara di Negara China')
@@ -46,10 +23,13 @@ with st.sidebar:
     st.header('Data Kualitas Udara di Kota Cina')
     selected_city = st.radio("Pilih Kota yang ingin Anda lihat", city_names, horizontal=False)
 
-# Ambil data berdasarkan kota yang dipilih
-df_selected = data_kota[selected_city]
+# Convert date column to datetime
+all_data['date'] = pd.to_datetime(all_data['date'])
 
-# Resampling data untuk mendapatkan rata-rata bulanan PM10
+# Ambil data berdasarkan kota yang dipilih
+df_selected = all_data[all_data['station'] == selected_city]
+
+# # Resampling data untuk mendapatkan rata-rata bulanan PM10
 data_time_series = df_selected[['date', 'PM10']].set_index('date').resample('ME').mean()
 
 # Plot nilai PM10
@@ -59,12 +39,12 @@ ax.set_title(f"PM10 di {selected_city} (Rata-rata Bulanan)")
 ax.legend()
 ax.grid()
 
-# Tampilkan plot di Streamlit
+# # Tampilkan plot di Streamlit
 st.pyplot(fig)
 
 #hitung nilai max dari kota yang dipilih
-max_PM10 = df_selected.PM10.max()
-max_date = df_selected[df_selected.PM10 == max_PM10].date.values[0]
+max_PM10 = df_selected["PM10"].max()
+max_date = df_selected[df_selected["PM10"] == max_PM10].date.values[0]
 max_date = pd.to_datetime(max_date)
 
 # Menampilkan kota yang dipilih
@@ -80,9 +60,6 @@ with st.expander("Explanation"):
         apabila menghirup udara dengan nilai PM10 yang tinggi dapat menyebabkan masalah pada paru-paru.
         """
     )
-
-# ubah data menjadi datetime
-all_data['date'] = pd.to_datetime(all_data['date'])
                                            
 # Menghitung rata-rata PM10 untuk semua kota per bulan
 data_all_time_series = all_data[['date', 'PM10']].set_index('date').resample('ME').mean()
@@ -91,11 +68,31 @@ data_all_time_series = all_data[['date', 'PM10']].set_index('date').resample('ME
 max_pm10_value = data_all_time_series['PM10'].max()
 max_pm10_date = data_all_time_series['PM10'].idxmax()
 
-# Memilih hanya kolom numerik
-numeric_data = all_data.select_dtypes(include=['number'])
+# Loop untuk menyimpan data TEMP dan PM10 dari tahun 2015–2017
+all_data['date'] = pd.to_datetime(all_data['date'])  # Pastikan kolom 'date' dalam format datetime
+date_data = all_data['date']
 
-# Menghitung korelasi antar kolom numerik
-correlation_matrix = numeric_data.corr()
+# Resample TEMP
+temp_resampled = all_data[['date', 'TEMP']].set_index('date').resample('ME').mean()
+temp_time_series = temp_resampled.loc['2015':'2017']
+
+# Resample PM10
+pm10_resampled = all_data[['date', 'PM10']].set_index('date').resample('ME').mean()
+pm10_time_series = pm10_resampled.loc['2015':'2017']
+
+# Gabungkan semua TEMP dan PM10 berdasarkan tanggal
+temp_time_series.columns = list(temp_time_series.keys())
+avg_temp = temp_time_series.mean(axis=1)
+
+pm10_time_series.columns = list(pm10_time_series.keys())
+avg_pm10 = pm10_time_series.mean(axis=1)
+
+temp_pm10, ax = plt.subplots(figsize=(15, 6))
+ax.plot(avg_temp.index, avg_temp, label='Rata-rata TEMP', color='orange')
+ax.plot(avg_pm10.index, avg_pm10, label='Rata-rata PM10', color='green')
+ax.set_title('Rata-rata Bulanan TEMP dan PM10 Semua Kota (2015 - 2017)')
+ax.legend()
+ax.grid()
 
 def plot_china_map(data):
     # Path ke file gambar lokal
@@ -126,11 +123,6 @@ ax.set_title(f"PM10 Rata-rata Bulanan di Semua Kota")
 ax.legend()
 ax.grid()
 
-# Plot nilai PM10 di setiap kota
-corr_plt, ax = plt.subplots(figsize=(15, 6))
-sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=ax)
-ax.set_title("Korelasi antar Kolom Numerik")
-
 tab1, tab2, tab3 = st.tabs(["Tab 1", "Tab 2", "Tab 3"])
 
 with tab1:
@@ -147,18 +139,16 @@ with tab1:
         )
 
 with tab2:
-    st.header("Korelasi Pada Semua Nilai Numerik")
+    st.header("Korelasi Nilai PM10 dan TEMP")
     # Tampilkan plot di Streamlit
-    st.pyplot(corr_plt)
+    st.pyplot(temp_pm10)
     with st.expander("See explanation"):
         st.write(
             """
             Korelasi adalah hubungan antara dua variabel.
-            Nilai korelasi berkisar dari -1 hingga 1.
-            Nilai 1 menunjukkan hubungan positif yang sempurna, 
-            sedangkan -1 menunjukkan hubungan negatif yang sempurna.
-            bisa dilihat nilai PM10 memiliki korelasi positif dengan nilai CO
-            sehingga jika nilai PM10 tinggi maka nilai CO juga tinggi.
+            Gambar diatas menunjukkan hubungan antara nilai PM10 dan TEMP.
+            bisa dilihat nilai PM10 memiliki korelasi kecil dengan nilai TEMP
+            jika nilai PM10 tinggi maka TEMP tidak terpengaruh
             """
         )
 
