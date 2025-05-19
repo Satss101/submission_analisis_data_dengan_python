@@ -10,7 +10,7 @@ city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
               'Gucheng', 'Huairou', 'Nongzhanguan', 'Shunyi', 'Tiantan',
               'Wanliu', 'Wanshouxigong']
 
-all_data = pd.read_csv('.\dashboard\dashboard.csv')
+all_data = pd.read_csv('./dashboard/dashboard.csv')
 # all_data = os.path.join(os.path.dirname(__file__), "dashboard.csv")
 
 # Membuat Dashboard
