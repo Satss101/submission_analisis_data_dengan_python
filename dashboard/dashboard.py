@@ -31,6 +31,8 @@ df_selected = all_data[all_data['station'] == selected_city]
 # # Resampling data untuk mendapatkan rata-rata bulanan PM10
 data_time_series = df_selected[['date', 'PM10']].set_index('date').resample('ME').mean()
 
+data_time_series = data_time_series.loc['2015':'2017']
+
 # Plot nilai PM10
 fig, ax = plt.subplots(figsize=(15, 6))
 ax.plot(data_time_series.index, data_time_series['PM10'], label=f"PM10 - {selected_city}", color='b')
