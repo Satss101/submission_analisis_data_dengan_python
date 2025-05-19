@@ -73,11 +73,11 @@ all_data['date'] = pd.to_datetime(all_data['date'])  # Pastikan kolom 'date' dal
 date_data = all_data['date']
 
 # Resample TEMP
-temp_resampled = all_data[['date', 'TEMP']].set_index('date').resample('ME').mean()
+temp_resampled = all_data[['date', 'TEMP']].set_index('date').resample('M').mean()
 temp_time_series = temp_resampled.loc['2015':'2017']
 
 # Resample PM10
-pm10_resampled = all_data[['date', 'PM10']].set_index('date').resample('ME').mean()
+pm10_resampled = all_data[['date', 'PM10']].set_index('date').resample('M').mean()
 pm10_time_series = pm10_resampled.loc['2015':'2017']
 
 # Gabungkan semua TEMP dan PM10 berdasarkan tanggal
