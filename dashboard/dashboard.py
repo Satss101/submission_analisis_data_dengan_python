@@ -4,7 +4,6 @@ import seaborn as sns
 import streamlit as st
 from geopy.geocoders import Nominatim
 import matplotlib.image as mpimg
-import os
 
 # Buat dictionary agar bisa dipilih berdasarkan nama kota
 city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
