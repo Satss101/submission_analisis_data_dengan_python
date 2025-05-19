@@ -28,7 +28,7 @@ all_data['date'] = pd.to_datetime(all_data['date'])
 df_selected = all_data[all_data['station'] == selected_city]
 
 # # Resampling data untuk mendapatkan rata-rata bulanan PM10
-data_time_series = df_selected[['date', 'PM10']].set_index('date').resample('ME').mean()
+data_time_series = df_selected[['date', 'PM10']].set_index('date').resample('M').mean()
 
 data_time_series = data_time_series.loc['2015':'2017']
 
