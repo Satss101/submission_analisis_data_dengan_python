@@ -101,7 +101,7 @@ ax.set_title("Matriks Korelasi Semua Kota")
 
 def plot_china_map(data):
     # Path ke file gambar lokal
-    image_path = 'china.jpg'
+    image_path = './china.jpg'
 
     # Membaca gambar peta China dari file lokal
     china_map = mpimg.imread(image_path)
