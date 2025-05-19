@@ -62,7 +62,7 @@ with st.expander("Explanation"):
     )
                                            
 # Menghitung rata-rata PM10 untuk semua kota per bulan
-data_all_time_series = all_data[['date', 'PM10']].set_index('date').resample('ME').mean()
+data_all_time_series = all_data[['date', 'PM10']].set_index('date').resample('M').mean()
 
 # Mencari nilai maksimum PM10 dan tanggalnya
 max_pm10_value = data_all_time_series['PM10'].max()
