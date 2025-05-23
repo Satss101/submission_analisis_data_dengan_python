@@ -10,7 +10,7 @@ city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
               'Gucheng', 'Huairou', 'Nongzhanguan', 'Shunyi', 'Tiantan',
               'Wanliu', 'Wanshouxigong']
 
-all_data = pd.read_csv('./dashboard/dashboard.csv')
+all_data = pd.read_csv('dashboard.csv')
 # all_data = os.path.join(os.path.dirname(__file__), "dashboard.csv")
 
 # Membuat Dashboard
@@ -36,6 +36,7 @@ data_time_series = data_time_series.loc['2015':'2017']
 fig, ax = plt.subplots(figsize=(15, 6))
 ax.plot(data_time_series.index, data_time_series['PM10'], label=f"PM10 - {selected_city}", color='b')
 ax.set_title(f"PM10 di {selected_city} (Rata-rata Bulanan)")
+ax.set_ylim(40,140)
 ax.legend()
 ax.grid()
 
@@ -96,24 +97,24 @@ ax.grid()
 
 numeric_data = all_data[['TEMP', 'PM10']]
 corelation_matrix = numeric_data.corr()
-corr_plt, ax = plt.subplots(figsize=(15, 6))
+corr_plt, ax = plt.subplots(figsize=(12, 8))
 sns.heatmap(corelation_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=ax)
 ax.set_title("Matriks Korelasi Semua Kota")
 
 def plot_china_map(data):
     # Path ke file gambar lokal
-    image_path = './china.jpg'
+    image_path = 'china.jpg'
 
     # Membaca gambar peta China dari file lokal
     china_map = mpimg.imread(image_path)
 
     # Membuat plot
-    map_pt,ax = plt.subplots(figsize=(10,10))
+    map_pt,ax = plt.subplots(figsize=(10, 10))
     # Disesuaikan dengan batas geografis China
     plt.imshow(china_map, extent=[73, 135, 18, 53], alpha=0.6) 
     ax.scatter(data['longitude'], data['latitude'], s=5, c='red', label='stasiun pemantauan')
     ax.set_title("Lokasi Stasiun Pemantauan Kualitas Udara di China")
-    ax.legend()
+    # ax.legend()
     # Menampilkan plot
     st.pyplot(map_pt)
 
@@ -121,11 +122,12 @@ def plot_china_map(data):
 all_data = all_data.dropna(subset=['longitude', 'latitude'])
 
 # Plot nilai PM10 di setiap kota
-tot_PM, ax = plt.subplots(figsize=(15, 6))
+tot_PM, ax = plt.subplots(figsize=(20, 10))
 ax.plot(data_all_time_series.index, data_all_time_series['PM10'], linestyle = '-', label='PM10', color = 'b')
 # Menandai titik maksimum dengan warna merah
 ax.scatter(max_pm10_date, max_pm10_value, color='red', s=300, marker='*', label=f'Max PM10')
 ax.set_title(f"Rata-rata Nilai PM10 per Bulan di Semua Kota")
+ax.set_ylim(40,140)
 ax.legend()
 ax.grid()
 
