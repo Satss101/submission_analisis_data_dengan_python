@@ -11,7 +11,12 @@ city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
               'Gucheng', 'Huairou', 'Nongzhanguan', 'Shunyi', 'Tiantan',
               'Wanliu', 'Wanshouxigong']
 
-all_data = pd.read_csv('dashboard.csv')
+BASE_DIR = os.path.dirname(__file__)
+
+# Path ke file CSV lokal
+all_data_dir = os.path.join(BASE_DIR, "dashboard.csv")
+
+all_data = pd.read_csv(all_data_dir)
 # all_data = os.path.join(os.path.dirname(__file__), "dashboard.csv")
 
 # Membuat Dashboard
@@ -103,7 +108,6 @@ sns.heatmap(corelation_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=ax)
 ax.set_title("Matriks Korelasi Semua Kota")
 
 def plot_china_map(data):
-    BASE_DIR = os.path.dirname(__file__)
     image_path = os.path.join(BASE_DIR, 'china.jpg')
     # Path ke file gambar lokal
     # image_path = 'china.jpg'
