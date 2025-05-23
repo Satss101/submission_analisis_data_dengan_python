@@ -4,6 +4,7 @@ import seaborn as sns
 import streamlit as st
 from geopy.geocoders import Nominatim
 import matplotlib.image as mpimg
+import os
 
 # Buat dictionary agar bisa dipilih berdasarkan nama kota
 city_names = ['Aotizhongxin', 'Changping', 'Dingling', 'Dongsi', 'Guanyuan',
@@ -102,8 +103,10 @@ sns.heatmap(corelation_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=ax)
 ax.set_title("Matriks Korelasi Semua Kota")
 
 def plot_china_map(data):
+    BASE_DIR = os.path.dirname(__file__)
+    image_path = os.path.join(BASE_DIR, 'china.jpg')
     # Path ke file gambar lokal
-    image_path = 'china.jpg'
+    # image_path = 'china.jpg'
 
     # Membaca gambar peta China dari file lokal
     china_map = mpimg.imread(image_path)
